@@ -1,9 +1,9 @@
-# himawari-8
+# himawari8
 *Put near-realtime picture of Earth as your desktop background*
 
 ![24 hours long animation by /u/hardypart](https://i.giphy.com/l3vRnMYNnbhdnz5Ty.gif)
 
-himawari-8 is a Python 3 script that fetches near-realtime (10 minutes delayed)
+himawari8 is a Python 3 script that fetches near-realtime (10 minutes delayed)
 picture of Earth as its taken by
 [Himawari 8 (ひまわり8号)](https://en.wikipedia.org/wiki/Himawari_8) and sets it
 as your desktop background.
@@ -31,7 +31,7 @@ For Windows, use a scheduled task.
 ## Configuration
 
 ```
-usage: himawari-8 [-h] [--version] [--auto-offset | -o OFFSET]
+usage: himawari8 [-h] [--version] [--auto-offset | -o OFFSET]
                   [-l {4,8,16,20}] [-d DEADLINE] [--save-battery]
                   [--output-dir OUTPUT_DIR] [--dont-change]
 
@@ -57,12 +57,12 @@ optional arguments:
 
 ```
 
-Most of the time himawari-8 can accurately detect your timezone if you pass the flag `--auto-offset`, although you may
+Most of the time himawari8 can accurately detect your timezone if you pass the flag `--auto-offset`, although you may
 also set it manually by `-o` (or `--offset`) flag. If your timezone is beyond GMT by more than 10 hours, use the closest
 one (either `+10` or `-12`).
 
 Increasing the level will increase the quality of the image as well as the time taken to download all the tiles and the
-memory consumption. For instance choosing 20 will make himawari-8 use ~700 MiB of memory at its peak and the image will
+memory consumption. For instance choosing 20 will make himawari8 use ~700 MiB of memory at its peak and the image will
 be around ~200 MB.
 
 You should set a deadline compatible with your cronjob (or timer) settings to assure that script will terminate in X
@@ -70,7 +70,7 @@ minutes before it is started again.
 
 You might use `--save-battery` to disable refreshing while running on battery power.
 
-You might also ask himawari-8 to not to change your wallpaper by `--dont-change`
+You might also ask himawari8 to not to change your wallpaper by `--dont-change`
 if you would it to download the image and stop.
 
 ### Nitrogen
@@ -89,17 +89,17 @@ bgcolor=#000000
 
 ```
 # Install
-python3 -m pip install --user himawari-8
+python3 -m pip install --user himawari8
 
 # Test whether it's working
-himawari-8 --auto-offset
+himawari8 --auto-offset
 
-# Set himawari-8 to be called periodically using the provided systemd timer
+# Set himawari8 to be called periodically using the provided systemd timer
     ## Copy systemd configuration (on bash)
-    cp systemd/himawari-8.{service,timer} ~/.config/systemd/user/
+    cp systemd/himawari8.{service,timer} ~/.config/systemd/user/
 
     ## Enable and start the timer
-    systemctl --user enable --now himawari-8.timer
+    systemctl --user enable --now himawari8.timer
 ```
 
 ### For KDE Users
@@ -131,20 +131,20 @@ Many thanks to [xenithorb](https://github.com/xenithorb) [for the solution](http
 ### For Mac OSX Users
 
 OSX has deprecated crontab, and replaced it with `launchd`. To set up a launch agent, copy the provided sample `plist`
-file in `osx/org.boramalper.himawari-8.plist` to `~/Library/LaunchAgents`, and edit the following entries if required
+file in `osx/org.boramalper.himawari8.plist` to `~/Library/LaunchAgents`, and edit the following entries if required
 
     mkdir -p ~/Library/LaunchAgents/
-    cp osx/org.boramalper.himawari-8.plist ~/Library/LaunchAgents/
+    cp osx/org.boramalper.himawari8.plist ~/Library/LaunchAgents/
 
-* `ProgrammingArguments` needs to be the path to himawari-8 installation. This *should* be `/usr/local/bin/himawari-8`
-by default, but himawari-8 may be installed elsewhere.
+* `ProgrammingArguments` needs to be the path to himawari8 installation. This *should* be `/usr/local/bin/himawari8`
+by default, but himawari8 may be installed elsewhere.
 
 * `StartInterval` controls the interval between successive runs, set to 10 minutes (600 seconds) by default,
 edit as desired.
 
 Finally, to launch it, enter this into the console:
 
-    launchctl load ~/Library/LaunchAgents/org.boramalper.himawari-8.plist
+    launchctl load ~/Library/LaunchAgents/org.boramalper.himawari8.plist
 
 
 ## Uninstallation
@@ -153,21 +153,21 @@ Finally, to launch it, enter this into the console:
 # Either remove the cronjob
 crontab -e
     # Remove the line
-    */10 * * * * himawari-8...
+    */10 * * * * himawari8...
 
 # OR if you used the systemd timer
-systemctl --user disable --now himawari-8.timer
-rm $HOME/.config/systemd/user/himawari-8.{timer,service}
+systemctl --user disable --now himawari8.timer
+rm $HOME/.config/systemd/user/himawari8.{timer,service}
 
 # Uninstall the package
-pip3 uninstall himawari-8
+pip3 uninstall himawari8
 ```
 
 
-`<INSTALLATION_PATH>` can be found using the command `which -- himawari-8`.
+`<INSTALLATION_PATH>` can be found using the command `which -- himawari8`.
 
 If you would like to share why, you can contact me on github or
-[send an e-mail](mailto:bora@boramalper.org).
+[send an e-mail](mailto:a.lister.hk@gmail.com).
 
 ## Attributions
 Thanks to *[MichaelPote](https://github.com/MichaelPote)* for the [initial
