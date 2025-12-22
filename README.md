@@ -157,11 +157,11 @@ Finally, to launch it, enter this into the console:
 
 ### For Windows Users
 
-### Method 1: Command Line (Recommended)
+#### Method 1: Command Line (Recommended)
 ```cmd
 schtasks /create /xml "windows\himawari8.xml" /tn "Himawari8 Wallpaper" /ru "%USERNAME%"
 ```
-### Method 2: Task Scheduler GUI
+#### Method 2: Task Scheduler GUI
 1. Open Task Scheduler (`Win + R`, type `taskschd.msc`)
 2. Right-click "Task Scheduler Library" → "Import Task..."
 3. Select `windows\himawari8.xml`
