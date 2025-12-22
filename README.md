@@ -8,8 +8,14 @@ picture of Earth as its taken by
 [Himawari 8 (ひまわり8号)](https://en.wikipedia.org/wiki/Himawari_8) and sets it
 as your desktop background.
 
-Set a cronjob (or systemd service) that runs in every 10 minutes to automatically get the
+## Execution
+
+(*See below for detailed instructions*)
+
+For Linux, set a cronjob (or systemd service) that runs every 10 minutes to automatically get the
 near-realtime picture of Earth.
+
+For Mac, use a Launch Agent.
 
 For Windows, use a scheduled task.
 
