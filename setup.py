@@ -14,7 +14,7 @@ setup(
                 "as its taken by Himawari 8 (ひまわり8号) and sets it as your desktop background.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["appdirs", "pillow", "python-dateutil"],
+    install_requires=["appdirs", "pillow", "python-dateutil", "packaging"],
     packages=find_packages(),
     entry_points={"console_scripts": ["himawaripy=himawaripy.__main__:main"]},
 )

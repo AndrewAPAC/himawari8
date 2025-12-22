@@ -26,7 +26,7 @@ from himawaripy.utils import set_background, get_desktop_environment
 import ssl
 
 # Semantic Versioning: Major, Minor, Patch
-HIMAWARIPY_VERSION = (2, 2, 0)
+HIMAWARIPY_VERSION = (3, 0, 0)
 counter = None
 HEIGHT = 550
 WIDTH = 550
@@ -95,7 +95,6 @@ def parse_args():
         default=10,
         help="UTC time offset in hours, must be less than or equal to +10",
     )
-
     parser.add_argument(
         "-l",
         "--level",
@@ -104,6 +103,13 @@ def parse_args():
         dest="level",
         default=4,
         help="increases the quality (and the size) of each tile. possible values are 4, 8, 16, 20",
+    )
+    parser.add_argument(
+        "--delay",
+        type=int,
+        dest="level",
+        default=15,
+        help="Delay between updates (windows). Use ",
     )
     parser.add_argument(
         "-d",
@@ -163,11 +169,12 @@ def download(url):
 
     for i in range(1, 4):  # retry max 3 times
         try:
-            with urllib.request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS)) as response:
+            context = ssl._create_unverified_context()
+            with urllib.request.urlopen(url, context=context) as response:
                 return response.read()
         except Exception as e:
             exception = e
-            print("[{}/3] Retrying to download '{}'...".format(i, url))
+            print("[{}/3] Retrying to download '{}'...{}".format(i, url, e))
             time.sleep(1)
             pass
 

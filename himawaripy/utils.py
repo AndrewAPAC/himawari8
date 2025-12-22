@@ -2,7 +2,7 @@ import os
 import re
 import sys
 import subprocess
-from distutils.version import LooseVersion
+from packaging.version import Version
 
 
 def set_background(file_path):
@@ -18,6 +18,36 @@ def set_background(file_path):
                 "repeat with aDesktop in theDesktops\n"
                 'set the picture of aDesktop to "' + file_path + '"\nend repeat\nend tell',
             ]
+        )
+    elif de == "windows":
+        import ctypes
+        import winreg
+
+        # Constants for SystemParametersInfo
+        SPI_SETDESKWALLPAPER = 20
+        SPIF_UPDATEINIFILE = 0x01
+        SPIF_SENDCHANGE = 0x02
+
+        # Convert to absolute path if needed
+        abs_file_path = os.path.abspath(file_path)
+
+        # Set wallpaper style in registry
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                             r"Control Panel\Desktop",
+                             0, winreg.KEY_SET_VALUE)
+
+        # WallpaperStyle: 0=Centered, 2=Stretched, 6=Fit, 10=Fill, 22=Span
+        # TileWallpaper: 0=No tile, 1=Tile
+        winreg.SetValueEx(key, "WallpaperStyle", 0, winreg.REG_SZ, "6")  # Fit
+        winreg.SetValueEx(key, "TileWallpaper", 0, winreg.REG_SZ, "0")  # No tile
+        winreg.CloseKey(key)
+
+        # Set the wallpaper
+        ctypes.windll.user32.SystemParametersInfoW(
+            SPI_SETDESKWALLPAPER,
+            0,
+            abs_file_path,
+            SPIF_UPDATEINIFILE | SPIF_SENDCHANGE
         )
     else:  # Linux
         # gsettings requires it.
@@ -56,7 +86,7 @@ def set_background(file_path):
                 ]
             )
         elif de == "kde":
-            if plasma_version() > LooseVersion("5.7"):
+            if plasma_version() > Version("5.7"):
                 """Command per https://github.com/boramalper/himawaripy/issues/57
 
                 Sets 'FillMode' to 1, which is "Scaled, Keep Proportions"
@@ -207,9 +237,9 @@ def plasma_version():
         output = subprocess.Popen(["plasmashell", "-v"], stdout=subprocess.PIPE).communicate()[0].decode("utf-8")
         print("Plasma version '{}'.".format(output))
         version = re.match(r"plasmashell (.*)", output).group(1)
-        return LooseVersion(version)
+        return Version(version)
     except (subprocess.CalledProcessError, IndexError):
-        return LooseVersion("")
+        return Version("")
 
 
 def is_running(process):
