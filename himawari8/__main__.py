@@ -16,12 +16,11 @@ from glob import iglob, glob
 import threading
 import time
 import subprocess
-
 import appdirs
 from PIL import Image
 from dateutil.tz import tzlocal
 
-from himawaripy.utils import set_background, get_desktop_environment
+from himawari8.utils import set_background, get_desktop_environment
 
 import ssl
 

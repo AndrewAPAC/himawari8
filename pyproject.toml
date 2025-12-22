@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "himawari8"
-version = "2.2.0"
+version = "3.0.0"
 description = "himawari8 is a Python 3 script that fetches near-realtime (10 minutes delayed) picture of Earth as its taken by Himawari 8 (ひまわり8号) and sets it as your desktop background."
 readme = "README.md"
 license = {text = "MIT"}
@@ -28,7 +28,7 @@ Homepage = "https://github.com/AndrewAPAC/himawari8"
 Repository = "https://github.com/AndrewAPAC/himawari8"
 Issues = "https://github.com/AndrewAPAC/himawari8/issues"
 
-[project.scripts]
+[project.gui-scripts]
 himawari8 = "himawari8.__main__:main"
 
 [tool.setuptools]

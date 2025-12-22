@@ -1,0 +1,11 @@
+# $HOME/.config/systemd/user/himawari8.timer
+
+[Unit]
+Description=Run himawari8 every 10 minutes
+
+[Timer]
+OnCalendar=*:0/10
+Persistent=true
+
+[Install]
+WantedBy=timers.target

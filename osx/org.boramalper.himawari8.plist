@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>org.boramalper.himawaripy</string>
+  <string>org.boramalper.himawari8</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/local/bin/himawaripy</string>
+    <string>/usr/local/bin/himawari8</string>
   </array>
 
   <key>Nice</key>
@@ -20,9 +20,9 @@
   <true/>
 
   <key>StandardErrorPath</key>
-  <string>/tmp/himapy.err</string>
+  <string>/tmp/himawari8.err</string>
 
   <key>StandardOutPath</key>
-  <string>/tmp/himapy.out</string>
+  <string>/tmp/himawari8.out</string>
 </dict>
 </plist>

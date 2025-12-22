@@ -5,4 +5,4 @@ Description=Update desktop background with satellite imagery
 
 [Service]
 Type=oneshot
-ExecStart=bash -c "himawaripy --auto-offset --save-battery"
+ExecStart=bash -c "himawari8 --auto-offset --save-battery"
