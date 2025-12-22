@@ -88,11 +88,11 @@ bgcolor=#000000
 * You need a valid python3 installation including the python3-setuptools package
 
 ```
-# Install
-python3 -m pip install --user himawari8
+# Install (from top level directory)
+pip install .
 
 # Test whether it's working
-himawari8 --auto-offset
+himawari8 --auto-offset    # No errors should be returned
 ```
 
 ### For Linux users
