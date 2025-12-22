@@ -11,6 +11,8 @@ as your desktop background.
 Set a cronjob (or systemd service) that runs in every 10 minutes to automatically get the
 near-realtime picture of Earth.
 
+For Windows, 
+
 ## Supported Desktop Environments
 ### Tested
 * Unity 7
@@ -21,6 +23,7 @@ near-realtime picture of Earth.
 * GNOME 3
 * Cinnamon 2.8.8
 * KDE
+* Windows
 
 ### Not Supported
 * any other desktop environments that are not mentioned above.
