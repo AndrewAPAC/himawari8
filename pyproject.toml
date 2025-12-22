@@ -1,3 +1,35 @@
-[tool.black]
-line-length = 120
-target-version = ["py37"]
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "himawari8"
+version = "2.2.0"
+description = "himawari8 is a Python 3 script that fetches near-realtime (10 minutes delayed) picture of Earth as its taken by Himawari 8 (ひまわり8号) and sets it as your desktop background."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Bora M. Alper", email = "bora@boramalper.org"}
+]
+maintainers = [
+    {name = "Andrew", email = "a.lister.hk@gmail.com"}
+]
+requires-python = ">=3.6"
+dependencies = [
+    "appdirs",
+    "pillow",
+    "python-dateutil",
+    "packaging",
+]
+
+[project.urls]
+Homepage = "https://github.com/AndrewAPAC/himawari8"
+"Original Project" = "https://labs.boramalper.org/himawaripy"
+Repository = "https://github.com/AndrewAPAC/himawari8"
+Issues = "https://github.com/AndrewAPAC/himawari8/issues"
+
+[project.scripts]
+himawari8 = "himawari8.__main__:main"
+
+[tool.setuptools]
+packages = ["himawari8"]
