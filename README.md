@@ -182,6 +182,9 @@ crontab -e
 systemctl --user disable --now himawari8.timer
 rm $HOME/.config/systemd/user/himawari8.{timer,service}
 
+# OR if you use windows. delete the Scheduled Task
+
+
 # Uninstall the package
 pip3 uninstall himawari8
 ```
