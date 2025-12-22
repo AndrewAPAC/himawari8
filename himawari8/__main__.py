@@ -105,13 +105,6 @@ def parse_args():
         help="increases the quality (and the size) of each tile. possible values are 4, 8, 16, 20",
     )
     parser.add_argument(
-        "--delay",
-        type=int,
-        dest="level",
-        default=15,
-        help="Delay between updates (windows). Use ",
-    )
-    parser.add_argument(
         "-d",
         "--deadline",
         type=int,
