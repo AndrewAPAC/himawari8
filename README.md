@@ -97,9 +97,9 @@ himawari8 --auto-offset
 
 ### For Linux users
 
-# Set himawari8 to be called periodically using the provided systemd timer
+#### Set himawari8 to be called periodically using the provided systemd timer
 ```
-# Copy systemd configuration (on bash)
+# Copy systemd configuration
 cp systemd/himawari8.{service,timer} ~/.config/systemd/user/
 
 # Enable and start the timer
