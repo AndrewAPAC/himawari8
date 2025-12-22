@@ -93,13 +93,17 @@ python3 -m pip install --user himawari8
 
 # Test whether it's working
 himawari8 --auto-offset
+```
+
+### For Linux users
 
 # Set himawari8 to be called periodically using the provided systemd timer
-    ## Copy systemd configuration (on bash)
-    cp systemd/himawari8.{service,timer} ~/.config/systemd/user/
+```
+# Copy systemd configuration (on bash)
+cp systemd/himawari8.{service,timer} ~/.config/systemd/user/
 
-    ## Enable and start the timer
-    systemctl --user enable --now himawari8.timer
+# Enable and start the timer
+systemctl --user enable --now himawari8.timer
 ```
 
 ### For KDE Users
@@ -127,7 +131,6 @@ To unlock desktop widgets ([from the KDE userbase](https://userbase.kde.org/Plas
 
 Many thanks to [xenithorb](https://github.com/xenithorb) [for the solution](https://github.com/xenithorb/himawaripy/commit/01d7c681ae7ce47f639672733d0f734574662833)!
 
-
 ### For Mac OSX Users
 
 OSX has deprecated crontab, and replaced it with `launchd`. To set up a launch agent, copy the provided sample `plist`
@@ -146,6 +149,20 @@ Finally, to launch it, enter this into the console:
 
     launchctl load ~/Library/LaunchAgents/org.boramalper.himawari8.plist
 
+### For Windows Users
+
+### Method 1: Command Line (Recommended)
+```cmd
+schtasks /create /xml "windows\himawari8.xml" /tn "Himawari8 Wallpaper" /ru "%USERNAME%"
+```
+### Method 2: Task Scheduler GUI
+1. Open Task Scheduler (`Win + R`, type `taskschd.msc`)
+2. Right-click "Task Scheduler Library" → "Import Task..."
+3. Select `windows\himawari8.xml`
+4. Change the user account to your username (may not be required)
+5. Click OK
+
+You can right click and Run the task to test it
 
 ## Uninstallation
 
