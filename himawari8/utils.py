@@ -80,7 +80,7 @@ def set_background(file_path):
         elif de == "lxde" or de == "lxqt" or de == "lubuntu":
             subprocess.call(
                 [
-                    "pcmanfm",
+                    "pcmanfm-qt",
                     "--set-wallpaper",
                     file_path,
                     "--wallpaper-mode=fit",
