@@ -57,6 +57,7 @@ def set_background(file_path):
 
         if de in ["gnome", "ubuntu", "unity", "cinnamon", "pantheon", "gnome-classic", "budgie-desktop"]:
             # Because of a bug and stupid design of gsettings, see http://askubuntu.com/a/418521/388226
+            # I don't believe this code is valid in recent versions of Ubuntu / Unity
             if de == "unity":
                 subprocess.call(["gsettings", "set", "org.gnome.desktop.background", "draw-background", "false"])
             subprocess.call(["gsettings", "set", "org.gnome.desktop.background", "picture-uri", "file://" + file_path])
@@ -77,7 +78,7 @@ def set_background(file_path):
                 subprocess.call(
                     ["xfconf-query", "--channel", "xfce4-desktop", "--property", display, "--set", file_path]
                 )
-        elif de == "lxde" or de == "lxqt" or de == "lubuntu":
+        elif de == "lxde":
             subprocess.call(
                 [
                     "pcmanfm",
@@ -157,8 +158,8 @@ def get_desktop_environment():
             desktop_session = desktop_session.lower()
             if desktop_session in [
                 "gnome",
-                "ubuntu",
                 "unity",
+                "ubuntu",
                 "cinnamon",
                 "mate",
                 "xfce4",
@@ -182,8 +183,6 @@ def get_desktop_environment():
             # There is no guarantee that they will not do the same with the other desktop environments.
             elif "xfce" in desktop_session or desktop_session.startswith("xubuntu"):
                 return "xfce4"
-            elif desktop_session.startswith("ubuntu"):
-                return "unity"
             elif desktop_session.startswith("lubuntu"):
                 return "lxde"
             elif desktop_session.startswith("kubuntu"):
