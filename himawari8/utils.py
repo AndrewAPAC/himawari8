@@ -81,7 +81,7 @@ def set_background(file_path):
         elif de == "lxde":
             subprocess.call(
                 [
-                    "pcmanfm",
+                    "pcmanfm-qt",
                     "--set-wallpaper",
                     file_path,
                     "--wallpaper-mode=fit",
