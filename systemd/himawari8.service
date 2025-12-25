@@ -5,4 +5,5 @@ Description=Update desktop background with satellite imagery
 
 [Service]
 Type=oneshot
-ExecStart=bash -c "himawari8 --auto-offset --save-battery"
+# Add options and the path to himawari8.  Suggested "--auto-offset --save-battery"
+ExecStart=/path/to/himawari8
