@@ -9,38 +9,47 @@ import multiprocessing as mp
 import multiprocessing.dummy as mp_dummy
 import os
 import os.path as path
-import sys
+from logging import DEBUG
 from time import strptime, strftime, mktime
 import urllib.request
 from glob import iglob, glob
 import threading
-import time
 import subprocess
 import appdirs
 from PIL import Image
 from dateutil.tz import tzlocal
+import logging
+import sys
 
 from himawari8.utils import set_background, get_desktop_environment
 
 import ssl
 
 # Semantic Versioning: Major, Minor, Patch
-HIMAWARIPY_VERSION = (3, 0, 0)
+HIMAWARIPY_VERSION = (3, 0, 1)
 counter = None
 HEIGHT = 550
 WIDTH = 550
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    stream=sys.stdout,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def calculate_time_offset(latest_date, auto, preferred_offset):
     if auto:
         preferred_offset = int(datetime.now(tzlocal()).strftime("%z")[0:3])
-        print("Detected offset: UTC{:+03d}:00".format(preferred_offset))
+        logger.info("Detected offset: UTC{:+03d}:00".format(preferred_offset))
         if 11 >= preferred_offset > 10:
             preferred_offset = 10
-            print("Offset is greater than +10, +10 will be used...")
+            logger.info("Offset is greater than +10, +10 will be used...")
         elif 12 >= preferred_offset > 11:
             preferred_offset = -12
-            print("Offset is greater than +10, -12 will be used...")
+            logger.info("Offset is greater than +10, -12 will be used...")
 
     himawari_offset = 10  # UTC+10:00 is the time zone that himawari is over
     offset = int(preferred_offset - himawari_offset)
@@ -67,9 +76,9 @@ def download_chunk(args):
     with counter.get_lock():
         counter.value += 1
         if counter.value == level * level:
-            print("Downloading tiles: completed.")
+            logger.info("Downloading tiles: completed.")
         else:
-            print("Downloading tiles: {}/{} completed...".format(counter.value, level * level))
+            logger.info("Downloading tiles: {}/{} completed...".format(counter.value, level * level))
     return x, y, tiledata
 
 
@@ -128,6 +137,18 @@ def parse_args():
         default=False,
         help="don't change the wallpaper (just download it)",
     )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        default=False,
+        help="enable debug logging",
+    )
+    parser.add_argument(
+        "--timeout",
+        type=int,
+        default=10,
+        help="timeout for downloading files: default is 10 seconds",
+    )
 
     args = parser.parse_args()
 
@@ -143,7 +164,7 @@ def parse_args():
 def is_discharging():
     if sys.platform.startswith("linux"):
         if len(glob("/sys/class/power_supply/BAT*")) > 1:
-            print("Multiple batteries detected, using BAT0.")
+            logger.info("Multiple batteries detected, using BAT0.")
 
         with open("/sys/class/power_supply/BAT0/status") as f:
             status = f.readline().strip()
@@ -156,18 +177,20 @@ def is_discharging():
         sys.exit("Battery saving feature works only on linux or mac!\n")
 
 
-def download(url):
+def download(url, timeout):
     exception = None
+
+    logger.info(f"Downloading")
+    logger.debug(f"from {url}")
 
     for i in range(1, 4):  # retry max 3 times
         try:
             context = ssl._create_unverified_context()
-            with urllib.request.urlopen(url, context=context) as response:
+            with urllib.request.urlopen(url, context=context, timeout=timeout) as response:
                 return response.read()
         except Exception as e:
             exception = e
-            print("[{}/3] Retrying to download '{}'...{}".format(i, url, e))
-            time.sleep(1)
+            logger.warning("[{}/3] Retrying to download '{}'...{}".format(i, url, e))
             pass
 
     if exception:
@@ -182,20 +205,22 @@ def thread_main(args):
 
     level = args.level  # since we are going to use it a lot of times
 
-    print("Updating...")
-    latest_json = download("https://himawari8-dl.nict.go.jp/himawari8/img/D531106/latest.json")
+    logger.info("Updating...")
+    latest_json = download("https://himawari8-dl.nict.go.jp/himawari8/img/D531106/latest.json",
+                           args.timeout)
     latest = strptime(json.loads(latest_json.decode("utf-8"))["date"], "%Y-%m-%d %H:%M:%S")
 
-    print("Latest version: {} GMT.".format(strftime("%Y/%m/%d %H:%M:%S", latest)))
+    logger.info("Latest version: {} GMT.".format(strftime("%Y/%m/%d %H:%M:%S", latest)))
     requested_time = calculate_time_offset(latest, args.auto_offset, args.offset)
     if args.auto_offset or args.offset != 10:
-        print("Offset version: {} GMT.".format(strftime("%Y/%m/%d %H:%M:%S", requested_time)))
+        logger.info("Offset version: {} GMT.".format(strftime("%Y/%m/%d %H:%M:%S", requested_time)))
 
     png = Image.new("RGB", (WIDTH * level, HEIGHT * level))
 
     p = mp_dummy.Pool(level * level)
-    print("Downloading tiles...")
-    res = p.map(download_chunk, it.product(range(level), range(level), (requested_time,), (args.level,)))
+    logger.info("Downloading tiles...")
+    res = p.map(download_chunk, it.product(range(level), range(level), (requested_time,),
+                                           (args.level,), (args.timeout,)))
 
     for (x, y, tiledata) in res:
         tile = Image.open(io.BytesIO(tiledata))
@@ -205,7 +230,7 @@ def thread_main(args):
         os.remove(file)
 
     output_file = path.join(args.output_dir, strftime("himawari-%Y%m%dT%H%M%S.png", requested_time))
-    print("Saving to '%s'..." % (output_file,))
+    logger.info("Saving to '%s'..." % (output_file,))
     os.makedirs(path.dirname(output_file), exist_ok=True)
     png.save(output_file, "PNG")
 
@@ -214,16 +239,19 @@ def thread_main(args):
         if not r:
             sys.exit("Your desktop environment '{}' is not supported!\n".format(get_desktop_environment()))
     else:
-        print("Not changing your wallpaper as requested.")
+        logger.info("Not changing your wallpaper as requested.")
 
 
 def main():
     args = parse_args()
 
-    print("himawaripy {}.{}.{}".format(*HIMAWARIPY_VERSION))
+    logger.info("himawaripy {}.{}.{}".format(*HIMAWARIPY_VERSION))
 
     if args.save_battery and is_discharging():
         sys.exit("Discharging!\n")
+    if args.verbose:
+        logger.setLevel(DEBUG)
+    timeout = args.timeout
 
     main_thread = threading.Thread(target=thread_main, args=(args,), name="himawaripy-main-thread", daemon=True)
     main_thread.start()
@@ -232,7 +260,6 @@ def main():
     if args.deadline and main_thread.is_alive():
         sys.exit("Timeout!\n")
 
-    print()
     sys.exit(0)
 
 

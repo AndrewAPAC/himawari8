@@ -39,7 +39,8 @@ For Windows, use a scheduled task.
 ```
 usage: himawari8 [-h] [--version] [--auto-offset | -o OFFSET]
                   [-l {4,8,16,20}] [-d DEADLINE] [--save-battery]
-                  [--output-dir OUTPUT_DIR] [--dont-change]
+                  [--output-dir OUTPUT_DIR] [--dont-change] 
+                  [--timeout TIMEOUT] [--verbose]
 
 set (near-realtime) picture of Earth as your desktop background
 
@@ -49,18 +50,21 @@ optional arguments:
   --auto-offset         determine offset automatically
   -o OFFSET, --offset OFFSET
                         UTC time offset in hours, must be less than or equal
-                        to +10
+                        to +10> Default is +10
   -l {4,8,16,20}, --level {4,8,16,20}
                         increases the quality (and the size) of each tile.
-                        possible values are 4, 8, 16, 20
+                        possible values are 4, 8, 16, 20. Default 4
   -d DEADLINE, --deadline DEADLINE
                         deadline in minutes to download all the tiles, set 0
-                        to cancel
+                        to cancel. Default is 6 minutes
   --save-battery        stop refreshing on battery
   --output-dir OUTPUT_DIR
-                        directory to save the temporary background image
+                        directory to save the temporary background image.
+                        Default is the user cache dir
   --dont-change         don't change the wallpaper (just download it)
-
+  -t TIMEOUT, --timeout TIMEOUT
+                        timeout for downloading files: default is 10 seconds
+   -v, --verbose        enable debug logging
 ```
 
 Most of the time himawari8 can accurately detect your timezone if you pass the flag `--auto-offset`, although you may
@@ -196,6 +200,8 @@ If you would like to share why, you can contact me on github or
 [send an e-mail](mailto:a.lister.hk@gmail.com).
 
 ## Attributions
+Thanks to *[Bora M. Alper](https://github.com/boramalper)* for his work and releases.
+
 Thanks to *[MichaelPote](https://github.com/MichaelPote)* for the [initial
 implementation](https://gist.github.com/MichaelPote/92fa6e65eacf26219022) using
 Powershell Script.
