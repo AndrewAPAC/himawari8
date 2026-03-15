@@ -88,7 +88,8 @@ def parse_args():
         epilog="https://labs.boramalper.org/himawaripy",
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s {}.{}.{}".format(*HIMAWARIPY_VERSION))
+    parser.add_argument("--version", action="version",
+                        version="%(prog)s {}.{}.{}".format(*HIMAWARIPY_VERSION))
 
     group = parser.add_mutually_exclusive_group()
 
