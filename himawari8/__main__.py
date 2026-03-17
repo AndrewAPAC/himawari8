@@ -63,11 +63,11 @@ def calculate_time_offset(latest_date, auto, preferred_offset):
 def download_chunk(args):
     global counter
 
-    x, y, latest, level = args
+    x, y, latest, level, timeout = args
     url_format = "https://himawari8-dl.nict.go.jp/himawari8/img/D531106/{}d/{}/{}_{}_{}.png"
     url = url_format.format(level, WIDTH, strftime("%Y/%m/%d/%H%M%S", latest), x, y)
 
-    tiledata = download(url)
+    tiledata = download(url, timeout)
 
     # If the tile data is 2867 bytes, it is a blank "No Image" tile.
     if tiledata.__sizeof__() == 2867:
