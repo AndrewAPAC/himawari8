@@ -79,6 +79,7 @@ def download_chunk(args):
             logger.info("Downloading tiles: completed.")
         else:
             logger.info("Downloading tiles: {}/{} completed...".format(counter.value, level * level))
+            logger.debug("\t%s", url)
     return x, y, tiledata
 
 
@@ -181,9 +182,6 @@ def is_discharging():
 def download(url, timeout):
     exception = None
 
-    logger.info(f"Downloading")
-    logger.debug(f"from {url}")
-
     for i in range(1, 4):  # retry max 3 times
         try:
             context = ssl._create_unverified_context()
@@ -207,8 +205,9 @@ def thread_main(args):
     level = args.level  # since we are going to use it a lot of times
 
     logger.info("Updating...")
-    latest_json = download("https://himawari8-dl.nict.go.jp/himawari8/img/D531106/latest.json",
-                           args.timeout)
+    url = "https://himawari8-dl.nict.go.jp/himawari8/img/D531106/latest.json"
+    latest_json = download(url, args.timeout)
+    logger.debug("Downloading %s", url)
     latest = strptime(json.loads(latest_json.decode("utf-8"))["date"], "%Y-%m-%d %H:%M:%S")
 
     logger.info("Latest version: {} GMT.".format(strftime("%Y/%m/%d %H:%M:%S", latest)))
